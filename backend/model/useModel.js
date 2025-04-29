@@ -1,4 +1,4 @@
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
 
@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
     Email:{
         type:String,
         required:true,
+        unique: true,
     },
     Password:{
         type:String,
@@ -19,6 +20,7 @@ const UserSchema = new mongoose.Schema({
         required:true,
     },
     role:{
+        type: Number,
         enum:[0,1],
         default:0,
         type:String

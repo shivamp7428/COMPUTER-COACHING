@@ -1,33 +1,39 @@
 import useModel from "../model/useModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import OTPVerification from "../model/EmailOtp.js"
+import sendOTPEmail  from "../utils/SendOtpEmail.js"
 
+export const Register = async (req, res) => {
+  try {
+    const { Name, Email, Password, Mobile } = req.body;
 
-export const Register = async(req , res)=>{
-    try {
-        const {Name , Email , Password , Mobile} = req.body;
-        const role = 0;
-
-        if(!Name || !Email || !Password || !Mobile){
-            return res.send({success:false , message:"Feild All Required"})
-        }
-        // check old uder
-        const OldUser = await useModel.findOne({Email})
-        if(OldUser){
-            return res.status(400).send({success:false , message:"You are already exist"})
-        }
-      // hashpassword
-        const salt = await bcrypt.genSalt(0)
-        const hashPassword = await bcrypt.hash(Password , salt)
- 
-        // create new user
-        const user = await useModel.create({ Name , Email , Password:hashPassword , Mobile })
-        return res.status(201).send({user})
-    } catch (error) {
-        console.log(error)
-        return res.status(500).send({success:false , message:error.message})
+    if (!Name || !Email || !Password || !Mobile) {
+      return res.status(400).send({ success: false, message: "All fields are required" });
     }
-}
+
+    const existingUser = await useModel.findOne({ Email });
+    if (existingUser) {
+      return res.status(400).send({ success: false, message: "User already exists" });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    //  Create OTP and log timestamps
+    const createdOTP = await OTPVerification.create({
+      email: Email,
+      otp: otp,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes from now
+    });
+    console.log("✅ OTP created at:", new Date(), "👉 Expires at:", createdOTP.expiresAt);
+
+    await sendOTPEmail(Email, otp);
+   return res.status(200).send({ success: true, message: "OTP sent to your email for verification"});
+  } catch (error) {
+    console.error("Registration error:", error);
+    return res.status(500).send({ success: false, message: "Server error, please try again later",});
+  }
+};
 
 export const login = async(req,res)=>{
     try {
@@ -62,3 +68,6 @@ export const login = async(req,res)=>{
         return res.status(500).send({success:false , message:error.message})
     }
 }
+
+
+
