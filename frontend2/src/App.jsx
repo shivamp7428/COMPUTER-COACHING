@@ -52,7 +52,7 @@ function MainLayout() {
       {!isExactVideoPage && <Footer />}
       
 
-      <div className="min-h-screen bg-gray-100 p-8">
+      <div className="bg-black p-8">
       <PopupModal />
     </div>
     </>

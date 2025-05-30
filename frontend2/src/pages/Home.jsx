@@ -488,7 +488,7 @@ const Home = () => {
       Register in <b className="text-orange-300">SK Coaching</b>
     </h1>
     <p className="md:mt-15 mt-10  text-lg">
-      Start Your Journey In The Best Computer Training Coaching.<br /> 
+      Start Y   our Journey In The Best Computer Training Coaching.<br /> 
       <p className="hidden md:block">Limited seats available – Enroll Now! </p>
     </p>
     <a href="/Register">

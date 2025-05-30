@@ -6,7 +6,6 @@ const Footer = () => {
     <> 
       <footer 
         className="relative  bg-black text-white py-12 px-6 bg-cover bg-center"
-        style={{ backgroundImage: "url(a.avif)" }} // Replace with your image URL
       >
         <div className="absolute inset-0  opacity-40"></div> {/* Overlay for better text visibility */}
 
